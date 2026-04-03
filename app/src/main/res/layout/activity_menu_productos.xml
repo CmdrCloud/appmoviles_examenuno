@@ -22,11 +22,51 @@
             android:textColor="?attr/colorPrimary"
             android:layout_marginBottom="16dp"/>
 
+        <!-- Category Spinner -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilCategoriaMenu"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Seleccionar Categoría"
+            android:layout_marginBottom="8dp">
+            <AutoCompleteTextView
+                android:id="@+id/spinnerCategoriaMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Search Bar -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilBuscarMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Buscar producto..."
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            app:startIconDrawable="@android:drawable/ic_menu_search"
+            android:layout_marginBottom="12dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etBuscarMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMenuProductos"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:scrollbars="vertical" />
+
+        <Button
+            android:id="@+id/btnAgregarVariosAlCarrito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Agregar al carrito"
+            android:paddingVertical="12dp" />
 
     </LinearLayout>
 

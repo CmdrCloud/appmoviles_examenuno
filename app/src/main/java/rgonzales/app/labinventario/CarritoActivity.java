@@ -10,25 +10,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
 import java.util.Locale;
 
 import rgonzales.app.labinventario.adapter.CarritoAdapter;
-import rgonzales.app.labinventario.model.CartManager;
+import rgonzales.app.labinventario.dao.CarritoDAO;
+import rgonzales.app.labinventario.model.CartItem;
 
 public class CarritoActivity extends AppCompatActivity {
 
     private RecyclerView rv;
     private TextView tvSubtotal, tvTotal;
     private Button btnPagar, btnVolver;
-    private CartManager cartManager;
+    private CarritoDAO carritoDao;
     private CarritoAdapter adapter;
+    private List<CartItem> cartItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrito);
 
-        cartManager = CartManager.getInstance();
+        carritoDao = new CarritoDAO(this);
 
         rv = findViewById(R.id.rvCarrito);
         tvSubtotal = findViewById(R.id.tvSubtotalCarrito);
@@ -37,19 +40,11 @@ public class CarritoActivity extends AppCompatActivity {
         btnVolver = findViewById(R.id.btnVolverCarrito);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
-        
-        adapter = new CarritoAdapter(cartManager.getCartItems(), new CarritoAdapter.OnCartChangeListener() {
-            @Override
-            public void onQuantityChanged() {
-                actualizarTotales();
-            }
-        });
-        rv.setAdapter(adapter);
 
         btnVolver.setOnClickListener(v -> finish());
 
         btnPagar.setOnClickListener(v -> {
-            if (cartManager.getCartItems().isEmpty()) {
+            if (cartItems == null || cartItems.isEmpty()) {
                 Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(CarritoActivity.this, PagoActivity.class);
@@ -57,15 +52,50 @@ public class CarritoActivity extends AppCompatActivity {
             }
         });
 
-        actualizarTotales();
-
         if(getSupportActionBar() != null) {
-            getSupportActionBar().hide(); // Usamos el header personalizado del layout
+            getSupportActionBar().hide();
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarCarrito();
+    }
+
+    private void cargarCarrito() {
+        carritoDao.open();
+        cartItems = carritoDao.listarCarrito();
+        carritoDao.close();
+
+        adapter = new CarritoAdapter(cartItems, new CarritoAdapter.OnCartChangeListener() {
+            @Override
+            public void onQuantityChanged() {
+                actualizarTotales();
+            }
+
+            @Override
+            public void onItemRemoved(int position) {
+                // El adapter ya maneja la eliminación visual y de la lista interna
+                actualizarTotales();
+            }
+
+            @Override
+            public void onUpdateQuantity(int idProducto, int nuevaCantidad) {
+                carritoDao.open();
+                carritoDao.actualizarCantidad(idProducto, nuevaCantidad);
+                carritoDao.close();
+            }
+        });
+        rv.setAdapter(adapter);
+        actualizarTotales();
+    }
+
     private void actualizarTotales() {
-        double subtotal = cartManager.getSubtotal();
+        double subtotal = 0;
+        for (CartItem item : cartItems) {
+            subtotal += item.getProducto().getPrecio() * item.getCantidad();
+        }
         tvSubtotal.setText(String.format(Locale.getDefault(), "%.2f Bs.", subtotal));
         tvTotal.setText(String.format(Locale.getDefault(), "%.2f Bs.", subtotal));
     }

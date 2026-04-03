@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Locale;
 
 import rgonzales.app.labinventario.R;
 import rgonzales.app.labinventario.model.CartItem;
@@ -20,6 +21,8 @@ public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.ViewHold
 
     public interface OnCartChangeListener {
         void onQuantityChanged();
+        void onItemRemoved(int position);
+        void onUpdateQuantity(int idProducto, int nuevaCantidad);
     }
 
     public CarritoAdapter(List<CartItem> items, OnCartChangeListener listener) {
@@ -38,25 +41,31 @@ public class CarritoAdapter extends RecyclerView.Adapter<CarritoAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CartItem item = items.get(position);
         holder.tvNombre.setText(item.getProducto().getNombre());
-        holder.tvPrecio.setText(String.format("%.2f Bs.", item.getProducto().getPrecio()));
-        holder.tvCantidad.setText(item.getCantidad() + "x");
+        holder.tvPrecio.setText(String.format(Locale.getDefault(), "%.2f Bs.", item.getProducto().getPrecio()));
+        holder.tvCantidad.setText(String.format(Locale.getDefault(), "%dx", item.getCantidad()));
 
         holder.btnMas.setOnClickListener(v -> {
-            item.setCantidad(item.getCantidad() + 1);
+            int nuevaCantidad = item.getCantidad() + 1;
+            item.setCantidad(nuevaCantidad);
             notifyItemChanged(position);
+            listener.onUpdateQuantity(item.getProducto().getId(), nuevaCantidad);
             listener.onQuantityChanged();
         });
 
         holder.btnMenos.setOnClickListener(v -> {
             if (item.getCantidad() > 1) {
-                item.setCantidad(item.getCantidad() - 1);
+                int nuevaCantidad = item.getCantidad() - 1;
+                item.setCantidad(nuevaCantidad);
                 notifyItemChanged(position);
+                listener.onUpdateQuantity(item.getProducto().getId(), nuevaCantidad);
                 listener.onQuantityChanged();
             } else {
+                int idProd = item.getProducto().getId();
                 items.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, items.size());
-                listener.onQuantityChanged();
+                listener.onUpdateQuantity(idProd, 0); // 0 triggers removal in DAO
+                listener.onItemRemoved(position);
             }
         });
     }

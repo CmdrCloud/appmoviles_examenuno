@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "inventario.db";
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
     private static final String CATEGORIAS = "create table categorias(" +
             "id integer primary key autoincrement," +
             "nombre text not null," +
@@ -27,6 +27,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "id integer primary key autoincrement," +
             "username text not null," +
             "password text not null);";
+
+    private static final String CARRITO = "create table carrito(" +
+            "id_producto integer primary key," +
+            "cantidad integer not null," +
+            "foreign key(id_producto) references productos(id) ON DELETE CASCADE" +
+            ");";
 
 
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
@@ -50,6 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CATEGORIAS);
         db.execSQL(PRODUCTOS);
         db.execSQL(ADMINISTRADOR);
+        db.execSQL(CARRITO);
         // Insert default administrator
         db.execSQL("INSERT INTO administrador (username, password) VALUES ('admin', 'cl4v3')");
     }
@@ -59,6 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists productos");
         db.execSQL("drop table if exists categorias");
         db.execSQL("drop table if exists administrador");
+        db.execSQL("drop table if exists carrito");
         onCreate(db);
     }
 }
