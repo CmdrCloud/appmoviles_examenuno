@@ -31,7 +31,7 @@ public class MenuProductosActivity extends AppCompatActivity {
 
     private RecyclerView rv;
     private FloatingActionButton fabCarrito;
-    private Button btnAgregarVarios;
+    private Button btnAgregarVarios, btnLogout;
     private EditText etBuscar;
     private AutoCompleteTextView spinnerCategoria;
     private ProductoDAO dao;
@@ -49,6 +49,7 @@ public class MenuProductosActivity extends AppCompatActivity {
         rv = findViewById(R.id.rvMenuProductos);
         fabCarrito = findViewById(R.id.fabCarrito);
         btnAgregarVarios = findViewById(R.id.btnAgregarVariosAlCarrito);
+        btnLogout = findViewById(R.id.btnLogout);
         etBuscar = findViewById(R.id.etBuscarMenu);
         spinnerCategoria = findViewById(R.id.spinnerCategoriaMenu);
         
@@ -61,6 +62,13 @@ public class MenuProductosActivity extends AppCompatActivity {
         fabCarrito.setOnClickListener(v -> {
             Intent intent = new Intent(MenuProductosActivity.this, CarritoActivity.class);
             startActivity(intent);
+        });
+
+        btnLogout.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuProductosActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
 
         btnAgregarVarios.setOnClickListener(v -> {
@@ -147,7 +155,6 @@ public class MenuProductosActivity extends AppCompatActivity {
         if (idCategoriaSeleccionada == -1) {
             lista = dao.buscarPorNombre(query);
         } else {
-            // Filtrado manual por categoría y nombre ya que el DAO no tiene buscarPorNombreYCategoria
             List<Producto> porCategoria = dao.listarPorCategoria(idCategoriaSeleccionada);
             lista = new ArrayList<>();
             for (Producto p : porCategoria) {

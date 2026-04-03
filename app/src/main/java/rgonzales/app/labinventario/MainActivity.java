@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -28,22 +29,35 @@ public class MainActivity extends AppCompatActivity {
     SessionManager session;
     private CategoriaDAO dao;
     private RecyclerView rv;
-    FloatingActionButton fab;
+    private FloatingActionButton fab;
+    private Button btnVerVentas, btnLogout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });*/
+        
         dao = new CategoriaDAO(this);
         rv = findViewById(R.id.rvCategorias);
         fab = findViewById(R.id.fabAddCategoria);
+        btnVerVentas = findViewById(R.id.btnVerVentasDirecto);
+        btnLogout = findViewById(R.id.btnLogoutAdmin);
+        
         rv.setLayoutManager(new LinearLayoutManager(this));
         fab.setOnClickListener(v -> mostrarDialogoCategoria(null));
+        
+        btnVerVentas.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, VerPagosActivity.class);
+            startActivity(intent);
+        });
+
+        btnLogout.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
+        
         session = new SessionManager(this);
     }
 
@@ -120,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // return super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
@@ -129,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        // Exit app
         if (id == R.id.menu_option1) {
             finishAffinity();
             return true;
@@ -146,6 +158,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.menu_option3) {
             Intent i = new Intent(MainActivity.this, FindProduct.class);
+            startActivity(i);
+            return true;
+        }
+
+        if (id == R.id.menu_ventas) {
+            Intent i = new Intent(MainActivity.this, VerPagosActivity.class);
             startActivity(i);
             return true;
         }

@@ -34,13 +34,6 @@
                 android:textColor="@color/price_green"
                 android:textAppearance="?attr/textAppearanceBodyMedium" />
 
-            <TextView
-                android:id="@+id/tvStockMenuProd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Stock: 0"
-                android:textSize="12sp"
-                android:textColor="?attr/colorOnSurfaceVariant" />
         </LinearLayout>
 
         <LinearLayout

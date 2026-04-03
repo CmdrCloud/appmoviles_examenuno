@@ -38,7 +38,6 @@ public class MenuProductoAdapter extends RecyclerView.Adapter<MenuProductoAdapte
         Producto p = productos.get(position);
         holder.tvNombre.setText(p.getNombre());
         holder.tvPrecio.setText(String.format(Locale.getDefault(), "%.2f Bs.", p.getPrecio()));
-        holder.tvStock.setText(String.format(Locale.getDefault(), "Stock: %d", p.getCantidad()));
 
         int cant = cantidadesSeleccionadas.getOrDefault(p.getId(), 0);
         holder.tvCantidad.setText(String.valueOf(cant));
@@ -75,14 +74,13 @@ public class MenuProductoAdapter extends RecyclerView.Adapter<MenuProductoAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvNombre, tvPrecio, tvStock, tvCantidad;
+        TextView tvNombre, tvPrecio, tvCantidad;
         Button btnMas, btnMenos;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNombre = itemView.findViewById(R.id.tvNombreMenuProd);
             tvPrecio = itemView.findViewById(R.id.tvPrecioMenuProd);
-            tvStock = itemView.findViewById(R.id.tvStockMenuProd);
             tvCantidad = itemView.findViewById(R.id.tvCantidadMenu);
             btnMas = itemView.findViewById(R.id.btnMasMenu);
             btnMenos = itemView.findViewById(R.id.btnMenosMenu);
