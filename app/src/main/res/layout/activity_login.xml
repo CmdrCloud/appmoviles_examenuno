@@ -10,41 +10,83 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<TextView
-    android:id="@+id/tvTitulo"
-    android:text="PIN"
-    android:textSize="20sp"
-    android:layout_marginBottom="20dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:text="PIN"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
-<EditText
-    android:id="@+id/etPin"
-    android:hint="Ingrese PIN"
-    android:inputType="numberPassword"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+    <!-- PIN Login Fields -->
+    <LinearLayout
+        android:id="@+id/layoutPin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-<EditText
-    android:id="@+id/etConfirmPin"
-    android:hint="Confirmar PIN"
-    android:inputType="numberPassword"
-    android:layout_marginTop="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/etPin"
+            android:hint="Ingrese PIN"
+            android:inputType="numberPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-<Button
-    android:id="@+id/btnAccion"
-    android:text="Continuar"
-    android:layout_marginTop="20dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/etConfirmPin"
+            android:hint="Confirmar PIN"
+            android:inputType="numberPassword"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <!-- Admin Login Fields -->
+    <LinearLayout
+        android:id="@+id/layoutAdmin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/etAdminUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Usuario Administrador"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/etAdminPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Clave Administrador"
+            android:inputType="textPassword" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Continuar" />
 
     <ImageButton
         android:id="@+id/btnReset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="center"
         app:srcCompat="@android:drawable/ic_menu_delete" />
+
+    <Button
+        android:id="@+id/btnAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:padding="4dp"
+        android:text="Ingresar como Administrador"
+        />
 
 </LinearLayout>

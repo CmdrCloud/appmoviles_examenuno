@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LabInventario">
         <activity
+            android:name=".PagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CarritoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MenuProductosActivity"
+            android:exported="false" />
+        <activity
             android:name=".FindProduct"
             android:exported="false" />
         <activity

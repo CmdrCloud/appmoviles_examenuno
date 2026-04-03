@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "inventario.db";
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static final String CATEGORIAS = "create table categorias(" +
             "id integer primary key autoincrement," +
             "nombre text not null," +
@@ -22,6 +22,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "fecha_creacion datetime default CURRENT_TIMESTAMP," +
             "foreign key(id_categoria) references categorias(id) ON DELETE CASCADE" +
             ");";
+
+    private static final String ADMINISTRADOR = "create table administrador(" +
+            "id integer primary key autoincrement," +
+            "username text not null," +
+            "password text not null);";
+
 
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -43,12 +49,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CATEGORIAS);
         db.execSQL(PRODUCTOS);
+        db.execSQL(ADMINISTRADOR);
+        // Insert default administrator
+        db.execSQL("INSERT INTO administrador (username, password) VALUES ('admin', 'cl4v3')");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists productos");
         db.execSQL("drop table if exists categorias");
+        db.execSQL("drop table if exists administrador");
         onCreate(db);
     }
 }
